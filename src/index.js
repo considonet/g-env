@@ -1,6 +1,6 @@
-// G.env 1.0.4.20171106
+// G.env 1.0.5.20180215
 // Environment variables
-// Copyright (C) 2013-2017 ConsidoNet Solutions / www.considonet.com
+// Copyright (C) 2013-2018 ConsidoNet Solutions / www.considonet.com
 // Released under MIT Licence
 
 // Properties:
@@ -10,6 +10,9 @@
 
 /*
 VERSION HISTORY
+1.0.5.20180215 @pg
++ TypeScript declarations
+
 1.0.4.20171106 @pg
 * Now acting as a separate npm module
 
