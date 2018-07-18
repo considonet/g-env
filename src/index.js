@@ -1,4 +1,4 @@
-// G.env 1.0.5.20180215
+// G.env 2.0.0
 // Environment variables
 // Copyright (C) 2013-2018 ConsidoNet Solutions / www.considonet.com
 // Released under MIT Licence
@@ -10,6 +10,11 @@
 
 /*
 VERSION HISTORY
+2.0.0 (20180718) @pg
++ Switched to semver
+* Dist package now transpiled from ES6 (compatibility with building environments not transpiling node_modules)
++ Source linted with tslint
+
 1.0.5.20180215 @pg
 + TypeScript declarations
 
@@ -30,16 +35,16 @@ VERSION HISTORY
 export default (() => {
 
   "use strict";
-  const _env = {};
+  const Env = {};
 
   // Touch device detection
-  _env.isTouchDevice = ("ontouchstart" in window) || (window.DocumentTouch && document instanceof window.DocumentTouch);
-  if (typeof (_env.isTouchDevice) === 'undefined') {
-    _env.isTouchDevice = false;
+  Env.isTouchDevice = ("ontouchstart" in window) || (window.DocumentTouch && document instanceof window.DocumentTouch);
+  if (typeof (Env.isTouchDevice) === "undefined") {
+    Env.isTouchDevice = false;
   }
 
-  _env.isMobile = {};
-  _env.browserInfo = {
+  Env.isMobile = {};
+  Env.browserInfo = {
     "appleWebKitVersion": null,
     "chromeVersion": null,
     "isAndroidBrowser": false,
@@ -61,30 +66,30 @@ export default (() => {
   // Apple webkit version detection
   const regExAppleWebKit = new RegExp(/AppleWebKit\/([\d.]+)/);
   const resultAppleWebKitRegEx = regExAppleWebKit.exec(navU);
-  _env.browserInfo.appleWebKitVersion = (resultAppleWebKitRegEx === null ? null : parseFloat(regExAppleWebKit.exec(navU)[1]));
+  Env.browserInfo.appleWebKitVersion = (resultAppleWebKitRegEx === null ? null : parseFloat(regExAppleWebKit.exec(navU)[1]));
 
   // Chrome version detection
   const regExChrome = new RegExp(/Chrome\/([\d.]+)/);
   const resultChromeRegEx = regExChrome.exec(navU);
-  _env.browserInfo.chromeVersion = (resultChromeRegEx === null ? null : parseFloat(regExChrome.exec(navU)[1]));
+  Env.browserInfo.chromeVersion = (resultChromeRegEx === null ? null : parseFloat(regExChrome.exec(navU)[1]));
 
   if(isMobileiOS || isMobileBlackBerry || isMobileAndroid || isMobileWindows) {
 
-    _env.isMobile.Android = isMobileAndroid;
-    _env.isMobile.Windows = isMobileWindows;
-    _env.isMobile.BlackBerry = isMobileBlackBerry;
-    _env.isMobile.iOS = isMobileiOS;
+    Env.isMobile.Android = isMobileAndroid;
+    Env.isMobile.Windows = isMobileWindows;
+    Env.isMobile.BlackBerry = isMobileBlackBerry;
+    Env.isMobile.iOS = isMobileiOS;
 
-    _env.browserInfo.isAndroidBrowser = (isMobileAndroid && (_env.browserInfo.appleWebKitVersion !== null && _env.browserInfo.appleWebKitVersion < 537)) || (_env.browserInfo.chromeVersion !== null && _env.browserInfo.chromeVersion < 37);
+    Env.browserInfo.isAndroidBrowser = (isMobileAndroid && (Env.browserInfo.appleWebKitVersion !== null && Env.browserInfo.appleWebKitVersion < 537)) || (Env.browserInfo.chromeVersion !== null && Env.browserInfo.chromeVersion < 37);
 
   } else {
-    _env.isMobile = false;
+    Env.isMobile = false;
   }
 
   // iOS version detection
   if (/iP(hone|od|ad)/.test(navigator.platform)) {
 
-    _env.browserInfo.iOSVersion = (() => {
+    Env.browserInfo.iOSVersion = (() => {
       // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
       const v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
       return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
@@ -93,27 +98,27 @@ export default (() => {
   }
 
   // Windows 7 IE detection
-  _env.browserInfo.IEWindows7 = ((('-ms-scroll-limit' in document.documentElement.style && '-ms-ime-align' in document.documentElement.style) || Boolean(window.ActiveXObject)) && navigator.userAgent.indexOf('Windows NT 6.1')!==-1);
+  Env.browserInfo.IEWindows7 = ((("-ms-scroll-limit" in document.documentElement.style && "-ms-ime-align" in document.documentElement.style) || Boolean(window.ActiveXObject)) && navigator.userAgent.indexOf("Windows NT 6.1")!==-1);
 
   // IE Version (incl. Edge)
-  _env.browserInfo.IEVersion = (() => {
-    const msie = navU.indexOf('MSIE ');
+  Env.browserInfo.IEVersion = (() => {
+    const msie = navU.indexOf("MSIE ");
     if (msie > 0) {
       // IE 10 or older => return version number
-      return parseInt(navU.substring(msie + 5, navU.indexOf('.', msie)), 10);
+      return parseInt(navU.substring(msie + 5, navU.indexOf(".", msie)), 10);
     }
 
-    const trident = navU.indexOf('Trident/');
+    const trident = navU.indexOf("Trident/");
     if (trident > 0) {
       // IE 11 => return version number
-      const rv = navU.indexOf('rv:');
-      return parseInt(navU.substring(rv + 3, navU.indexOf('.', rv)), 10);
+      const rv = navU.indexOf("rv:");
+      return parseInt(navU.substring(rv + 3, navU.indexOf(".", rv)), 10);
     }
 
-    const edge = navU.indexOf('Edge/');
+    const edge = navU.indexOf("Edge/");
     if (edge > 0) {
       // Edge (IE 12+) => return version number
-      return parseInt(navU.substring(edge + 5, navU.indexOf('.', edge)), 10);
+      return parseInt(navU.substring(edge + 5, navU.indexOf(".", edge)), 10);
     }
 
     // other browser
@@ -121,21 +126,21 @@ export default (() => {
   })();
 
   // CSS3 Transitions support
-  _env.browserInfo.supportsTransitions = (() => {
+  Env.browserInfo.supportsTransitions = (() => {
     const b = document.body || document.documentElement;
     const s = b.style;
-    let p = 'transition';
+    let p = "transition";
 
-    if (typeof s[p] === 'string') {
+    if (typeof s[p] === "string") {
       return true;
     }
 
     // Tests for vendor specific prop
-    const v = ['Moz', 'webkit', 'Webkit', 'Khtml', 'O', 'ms'];
+    const v = ["Moz", "webkit", "Webkit", "Khtml", "O", "ms"];
     p = p.charAt(0).toUpperCase() + p.substr(1);
 
-    for (let i=0; i<v.length; i++) {
-      if (typeof s[v[i] + p] === 'string') {
+    for (let i = 0; i<v.length; i++) {
+      if (typeof s[v[i] + p] === "string") {
         return true;
       }
     }
@@ -144,11 +149,11 @@ export default (() => {
   })();
 
   // CSS3 Animations support
-  _env.browserInfo.supportsAnimations = (() => {
+  Env.browserInfo.supportsAnimations = (() => {
 
     let animation = false;
-    const domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
-    const elm = document.createElement('div');
+    const domPrefixes = "Webkit Moz O ms Khtml".split(" ");
+    const elm = document.createElement("div");
 
     if (elm.style.animationName !== undefined) {
       animation = true;
@@ -156,7 +161,7 @@ export default (() => {
 
     if (animation === false) {
       for (let i = 0; i < domPrefixes.length; i++) {
-        if (elm.style[domPrefixes[i] + 'AnimationName'] !== undefined) {
+        if (elm.style[domPrefixes[i] + "AnimationName"] !== undefined) {
           animation = true;
           break;
         }
@@ -168,8 +173,8 @@ export default (() => {
   })();
 
   // Scrollbar width measure
-  if(_env.browserInfo.IEVersion===10 || _env.browserInfo.IEVersion===11 || _env.browserInfo.IEVersion===12 || _env.browserInfo.IEVersion===13) {
-    _env.browserInfo.scrollbarWidth = 0;
+  if(Env.browserInfo.IEVersion===10 || Env.browserInfo.IEVersion===11 || Env.browserInfo.IEVersion===12 || Env.browserInfo.IEVersion===13) {
+    Env.browserInfo.scrollbarWidth = 0;
   } else {
     // Create the measurement node
     const scrollDiv = document.createElement("div");
@@ -179,10 +184,10 @@ export default (() => {
     scrollDiv.style.position = "absolute";
     scrollDiv.style.top = "-9999px";
     document.body.appendChild(scrollDiv);
-    _env.browserInfo.scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+    Env.browserInfo.scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
     document.body.removeChild(scrollDiv);
   }
 
-  return _env;
+  return Env;
 
 })();
