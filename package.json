@@ -1,21 +1,25 @@
 {
   "name": "@considonet/g-env",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Browser environment detection helpers",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
   },
   "keywords": [
     "gstrap"
   ],
   "author": "ConsidoNet Solutions Paweł Gabryelewicz",
   "license": "MIT",
+  "repository": "github:considonet/g-env",
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "rollup": "^0.67.3",
+    "rollup-plugin-babel": "^3.0.7",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2"
   }
