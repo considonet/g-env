@@ -1,6 +1,6 @@
 {
   "name": "@considonet/g-env",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Browser environment detection helpers",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -12,6 +12,7 @@
   ],
   "author": "ConsidoNet Solutions Paweł Gabryelewicz",
   "license": "MIT",
+  "repository": "github:considonet/g-env",
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
