@@ -1,6 +1,6 @@
 'use strict';
 
-// G.env 2.1.0
+// G.env 2.1.1
 // Environment variables
 // Copyright (C) 2013-2018 ConsidoNet Solutions / www.considonet.com
 // Released under MIT Licence
@@ -12,6 +12,10 @@
 
 /*
 VERSION HISTORY
+2.1.1 (20181129) @pg
+* ignore files fixes
+* cleanup
+
 2.1.0 (20181129) @pg
 + Switched to git (now available on github), file cleanup
 + Now built with rollup
