@@ -31,7 +31,8 @@
     "no-trailing-whitespace": false,
     "whitespace": [true, "check-type-operator", "check-decl"],
     "max-line-length": [false],
-    "max-file-line-count": [false]
+    "max-file-line-count": [false],
+    "no-namespace": false
   },
   "rulesDirectory": []
 }

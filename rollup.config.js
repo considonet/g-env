@@ -1,17 +1,36 @@
-import babel from 'rollup-plugin-babel';
-import resolve from 'rollup-plugin-node-resolve';
+import babel from "rollup-plugin-babel";
+import resolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
+import pkg from "./package.json";
 
 export default {
-  input: './src/index.js',
-  output: {
-    file: './dist/index.js',
-    format: 'cjs'
-  },
+  input: "./src/index.js",
+  output: [
+    {
+      file: pkg.main,
+      format: "cjs",
+      globals: {
+        react: "React"
+      }
+    },
+    {
+      file: pkg.module,
+      format: "es",
+      globals: {
+        react: "React"
+      }
+    }
+  ],
   plugins: [
     babel({
-      exclude: 'node_modules/**' // only transpile our source code
+      include: [ "*.js+(|x)", "**/*.js+(|x)"],
+      exclude: "node_modules/**" // only transpile our source code
     }),
-    resolve()
+    resolve(),
+    commonjs()
   ],
-  external: []
+  external: [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+  ]
 };
