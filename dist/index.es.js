@@ -1,10 +1,7 @@
-'use strict';
-
 // G.env 2.1.1
 // Environment variables
 // Copyright (C) 2013-2018 ConsidoNet Solutions / www.considonet.com
 // Released under MIT Licence
-
 // Properties:
 // env.isTouchDevice - detects if a touch device is being used
 // env.isMobile - detects mobile devices (if so provides platform information)
@@ -41,13 +38,12 @@ VERSION HISTORY
 + Initial version
 
 */
-
 var index = (function () {
 
-  var Env = {};
+  var Env = {}; // Touch device detection
 
-  // Touch device detection
   Env.isTouchDevice = "ontouchstart" in window || window.DocumentTouch && document instanceof window.DocumentTouch;
+
   if (typeof Env.isTouchDevice === "undefined") {
     Env.isTouchDevice = false;
   }
@@ -63,59 +59,54 @@ var index = (function () {
     "supportsAnimations": false,
     "IEVersion": false,
     "scrollbarWidth": 0
-  };
+  }; // Mobile device detection
 
-  // Mobile device detection
   var navU = window.navigator.userAgent;
   var isMobileAndroid = /Android/i.test(navU);
   var isMobileWindows = /IEMobile/i.test(navU) || /Windows Phone/i.test(navU);
   var isMobileBlackBerry = /BlackBerry/i.test(navU);
-  var isMobileiOS = /iPhone|iPad|iPod/i.test(navU);
+  var isMobileiOS = /iPhone|iPad|iPod/i.test(navU); // Apple webkit version detection
 
-  // Apple webkit version detection
   var regExAppleWebKit = new RegExp(/AppleWebKit\/([\d.]+)/);
   var resultAppleWebKitRegEx = regExAppleWebKit.exec(navU);
-  Env.browserInfo.appleWebKitVersion = resultAppleWebKitRegEx === null ? null : parseFloat(regExAppleWebKit.exec(navU)[1]);
+  Env.browserInfo.appleWebKitVersion = resultAppleWebKitRegEx === null ? null : parseFloat(regExAppleWebKit.exec(navU)[1]); // Chrome version detection
 
-  // Chrome version detection
   var regExChrome = new RegExp(/Chrome\/([\d.]+)/);
   var resultChromeRegEx = regExChrome.exec(navU);
   Env.browserInfo.chromeVersion = resultChromeRegEx === null ? null : parseFloat(regExChrome.exec(navU)[1]);
 
   if (isMobileiOS || isMobileBlackBerry || isMobileAndroid || isMobileWindows) {
-
     Env.isMobile.Android = isMobileAndroid;
     Env.isMobile.Windows = isMobileWindows;
     Env.isMobile.BlackBerry = isMobileBlackBerry;
     Env.isMobile.iOS = isMobileiOS;
-
     Env.browserInfo.isAndroidBrowser = isMobileAndroid && Env.browserInfo.appleWebKitVersion !== null && Env.browserInfo.appleWebKitVersion < 537 || Env.browserInfo.chromeVersion !== null && Env.browserInfo.chromeVersion < 37;
   } else {
     Env.isMobile = false;
-  }
+  } // iOS version detection
 
-  // iOS version detection
+
   if (/iP(hone|od|ad)/.test(navigator.platform)) {
-
     Env.browserInfo.iOSVersion = function () {
       // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
       var v = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
       return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
     }();
-  }
+  } // Windows 7 IE detection
 
-  // Windows 7 IE detection
-  Env.browserInfo.IEWindows7 = ("-ms-scroll-limit" in document.documentElement.style && "-ms-ime-align" in document.documentElement.style || Boolean(window.ActiveXObject)) && navigator.userAgent.indexOf("Windows NT 6.1") !== -1;
 
-  // IE Version (incl. Edge)
+  Env.browserInfo.IEWindows7 = ("-ms-scroll-limit" in document.documentElement.style && "-ms-ime-align" in document.documentElement.style || Boolean(window.ActiveXObject)) && navigator.userAgent.indexOf("Windows NT 6.1") !== -1; // IE Version (incl. Edge)
+
   Env.browserInfo.IEVersion = function () {
     var msie = navU.indexOf("MSIE ");
+
     if (msie > 0) {
       // IE 10 or older => return version number
       return parseInt(navU.substring(msie + 5, navU.indexOf(".", msie)), 10);
     }
 
     var trident = navU.indexOf("Trident/");
+
     if (trident > 0) {
       // IE 11 => return version number
       var rv = navU.indexOf("rv:");
@@ -123,16 +114,17 @@ var index = (function () {
     }
 
     var edge = navU.indexOf("Edge/");
+
     if (edge > 0) {
       // Edge (IE 12+) => return version number
       return parseInt(navU.substring(edge + 5, navU.indexOf(".", edge)), 10);
-    }
+    } // other browser
 
-    // other browser
+
     return false;
-  }();
+  }(); // CSS3 Transitions support
 
-  // CSS3 Transitions support
+
   Env.browserInfo.supportsTransitions = function () {
     var b = document.body || document.documentElement;
     var s = b.style;
@@ -140,9 +132,9 @@ var index = (function () {
 
     if (typeof s[p] === "string") {
       return true;
-    }
+    } // Tests for vendor specific prop
 
-    // Tests for vendor specific prop
+
     var v = ["Moz", "webkit", "Webkit", "Khtml", "O", "ms"];
     p = p.charAt(0).toUpperCase() + p.substr(1);
 
@@ -153,11 +145,10 @@ var index = (function () {
     }
 
     return false;
-  }();
+  }(); // CSS3 Animations support
 
-  // CSS3 Animations support
+
   Env.browserInfo.supportsAnimations = function () {
-
     var animation = false;
     var domPrefixes = "Webkit Moz O ms Khtml".split(" ");
     var elm = document.createElement("div");
@@ -176,9 +167,9 @@ var index = (function () {
     }
 
     return animation;
-  }();
+  }(); // Scrollbar width measure
 
-  // Scrollbar width measure
+
   if (Env.browserInfo.IEVersion === 10 || Env.browserInfo.IEVersion === 11 || Env.browserInfo.IEVersion === 12 || Env.browserInfo.IEVersion === 13) {
     Env.browserInfo.scrollbarWidth = 0;
   } else {
@@ -197,4 +188,4 @@ var index = (function () {
   return Env;
 })();
 
-module.exports = index;
+export default index;

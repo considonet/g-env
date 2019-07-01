@@ -2,11 +2,12 @@
 	"plugins": [],
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
 				"modules": false,
-        "targets": ["ie >= 9", "> 1%"]
+        "targets": ["ie >= 8", "> 1%", "iOS >= 8"]
       }
-    ]
+    ],
+    "@babel/preset-react"
   ]
 }
