@@ -1,4 +1,4 @@
-// G.env 2.1.1
+// G.env 2.1.2
 // Environment variables
 // Copyright (C) 2013-2018 ConsidoNet Solutions / www.considonet.com
 // Released under MIT Licence
@@ -10,6 +10,11 @@
 
 /*
 VERSION HISTORY
+2.1.2 (20190701) @pg
+* Dependencies update
+* Switch to yarn
+* ES and UMD module compilation
+
 2.1.1 (20181129) @pg
 * ignore files fixes
 * cleanup
